@@ -89,45 +89,9 @@ public class BookDefination {
 		
 	   //Constructing the request
 	   if(string.equals("ID"))
-	   {
-		   //Getting the request based on response
-		   response = RestAssured.given().queryParam("ID", bookId).when().get(APIResources.GetBook.getResource());
-		   response.then().assertThat().statusCode(200);
-		   
-		   JSONArray responseArray = new JSONArray(response.body().asString());
-		   for(int i = 0; i < responseArray.length(); i++)
-		   {
-			   JSONObject responseObject = responseArray.getJSONObject(i);
-			   Set<String> Key = responseObject.keySet();
-			   Assert.assertTrue(Key.contains("book_name"));
-			   Assert.assertTrue(Key.contains("isbn"));
-			   Assert.assertTrue(Key.contains("aisle"));
-			   Assert.assertTrue(Key.contains("author"));
-			   Assert.assertTrue(responseObject.getString("book_name").equals(bookName));
-			   Assert.assertTrue(responseObject.getString("author").equals(authorName));			   
-		   }
-		   
-	   }
+	        new Utils().Validate(response, "ID", bookId, bookName);
 	   else
-	   {
-		   //Getting the request based on response
-		   response = RestAssured.given().queryParam("AuthorName", authorName).when().get(APIResources.GetBook.getResource());
-		   response.then().assertThat().statusCode(200);
-		   JSONArray responseArray = new JSONArray(response.body().asString());
-		   boolean bookExists = false;
-		   for(int i = 0; i < responseArray.length(); i++)
-		   {
-			   JSONObject responseObject = responseArray.getJSONObject(i);
-			   Set<String> Key = responseObject.keySet();
-			   Assert.assertTrue(Key.contains("book_name"));
-			   Assert.assertTrue(Key.contains("isbn"));
-			   Assert.assertTrue(Key.contains("aisle"));
-			   if(responseObject.getString("book_name").equals(bookName))
-				   bookExists = true;
-		   }
-		       Assert.assertTrue(bookExists);
-			   
-	   }       
+	        new Utils().Validate(response, "AuthorName", authorName, bookName); 
 	}
 
 	@Then("The user deletes the book")

@@ -5,7 +5,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Properties;
+import java.util.Set;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.junit.Assert;
+
+import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
@@ -58,5 +64,39 @@ public class Utils {
 		String resp=response.asString();
 		JsonPath   js = new JsonPath(resp);
 		return js.get(key).toString();
+	}
+	
+	public void Validate(Response response, String key, String Param, String bookName)
+	{
+		boolean bookExists = false;
+		if(key.equals("ID"))
+			response = RestAssured.given().queryParam("ID", Param).when().get(APIResources.GetBook.getResource());
+		else
+			response = RestAssured.given().queryParam("AuthorName", Param).when().get(APIResources.GetBook.getResource());
+		
+		response.then().assertThat().statusCode(200);
+		JSONArray responseArray = new JSONArray(response.body().asString());
+		
+		for(int i = 0; i < responseArray.length(); i++)
+		   {
+			   JSONObject responseObject = responseArray.getJSONObject(i);
+			   Set<String> Key = responseObject.keySet();
+			   Assert.assertTrue(Key.contains("book_name"));
+			   Assert.assertTrue(Key.contains("isbn"));
+			   Assert.assertTrue(Key.contains("aisle"));
+			   if(key.equals("ID"))
+			   {	   
+			       Assert.assertTrue(Key.contains("author"));
+			   //    Assert.assertTrue(responseObject.getString("author").equals(Param));
+			   }
+			   else
+			   {
+				   if(responseObject.getString("book_name").equals(bookName))
+					   bookExists = true;
+			   }
+	      }
+		
+		  if(!key.equals("ID"))
+			  Assert.assertTrue(bookExists);
 	}
 }
