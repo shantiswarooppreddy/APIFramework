@@ -39,12 +39,16 @@ public class Utils {
 	}
 	
 	public RequestSpecification bookRequestSpecification() throws IOException
-	{
-		 PrintStream log = new PrintStream(new FileOutputStream("logging.txt"), true);
+	{    
+		if(req1 == null)
+	    { 
+		 PrintStream log = new PrintStream(new FileOutputStream("logging.txt"));
 		 req1 = new RequestSpecBuilder().setBaseUri(getGlobalValue("bookUrl")).
 				 addFilter(RequestLoggingFilter.logRequestTo(log)).
 				 addFilter(ResponseLoggingFilter.logResponseTo(log)).
 				 build();
+		 return req1;
+	    }
 		 return req1;
 	}
 	

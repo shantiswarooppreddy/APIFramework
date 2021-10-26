@@ -3,6 +3,7 @@ Feature: Validating Book APIs
 Background: The Base Url is assigned
      Given The Base Url is assigned
 
+@Book
 Scenario: Verify if the user is able to add a book
      Given The user adds a book with name "See Test" isbn "12340" aisle "5678" author "William Wald" as "Object"
      Then  The user gets the book added with the "ID"
@@ -10,6 +11,7 @@ Scenario: Verify if the user is able to add a book
      And   The user deletes the book
      And   Verifies whether the book has been deleted
 
+@Book
 Scenario Outline: Verify that the user is able to add multiple books
      Given The user adds a book with name "<bookName>" isbn "<isbn>" aisle "<aisle>" author "<authorName>" as "<form>" 
      Then  The user gets the book added with the "ID"
@@ -22,6 +24,7 @@ Examples:
 	|Cypress       |15670      |9087          |Robert Wald    |Object   | 
 	|Webdirver IO  |14560      |5678          |Robert Wald    |Object   |
 
+@Book
 Scenario: Verify the user is not able to add the same book again
      Given The user adds a book with name "Learn Selenium 15" isbn "90024379154" aisle "345723714" author "Rahul Shetty4" as "Object"
      Then The user adds a book with name "Learn Selenium 15" isbn "90024379154" aisle "345723714" author "Rahul Shetty4" as "Object"

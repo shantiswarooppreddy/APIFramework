@@ -89,6 +89,6 @@ public class StepDefination extends Utils {
     @Then("verify Address in the response matches with the request")
     public void verify_Address_in_the_response_matches_with_the_request() {
     // Write code here that turns the phrase above into concrete actions
-    assertEquals("Changed Address",getJsonPath(response,"address"));
+    assertEquals("Address successfully updated",getJsonPath(response,"msg"));
 }
 }
